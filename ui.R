@@ -32,9 +32,9 @@ navbarPage(windowTitle = "Mitchell Lisle | Compass", img(src = "logo.png", heigh
                                 shinyjs::hidden(div(id = "fields",
                                   h1("Suburb"),
                                   h5(textOutput("suburb")),
-                                  textOutput("blurb")
-                                  # h2("Population"),
-                                  # h5(textOutput("population")),
+                                  textOutput("blurb"),
+                                  h2("Population"),
+                                  h5(textOutput("population"))
                                   # h2("Most Prevalent Industry of Employment"),
                                   # highchartOutput("industry_chart", height = "25%"),
                                   # h2("Most Prevalent Religions"),

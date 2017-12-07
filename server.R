@@ -26,7 +26,7 @@ source("R/processing.R")
 ####################################################
 map_polygons <- geojsonio::geojson_read("data/suburb_simple.geojson", what = "sp")
 suburb_blurbs <- fread("data/blurbs.csv")
-# population <- fread("data/population_POA.csv", header = TRUE)
+population <- fread("data/suburb_data/ssc_population.csv", header = TRUE)
 # religion <- fread("data/religions_POA.csv", header = TRUE)
 # industry <- fread("data/industry_POA_2011.csv", header = TRUE)
 suburbs <- unique(map_polygons$SSC_NAME)
@@ -69,7 +69,7 @@ function(input, output, session) {
     observeEvent(input$map_shape_click$id, {
       shinyjs::show(id = "fields", anim = FALSE)
       layerid <- input$map_shape_click$id
-      # population_data <- data.frame(subset(population, select = c("2016", "Change", "lat", "lon"), POA_CODE == layerid))
+      population_data <- data.frame(subset(population, select = c("population"), SSC == layerid))
       # religion_data <- data.frame(subset(religion, select = c("religion", "count"), POA_CODE == layerid)) %>% arrange(religion)
       # industry_data <- data.frame(subset(industry, select = c("industry", "count"), POA_CODE == layerid)) %>% arrange(industry)
       suburb_blurbs_data <- data.frame(subset(suburb_blurbs, select = "blurb", suburb == layerid))
@@ -91,7 +91,7 @@ function(input, output, session) {
         addPolygons(stroke = TRUE, weight = 2, color = "red", fillOpacity = 0.1, data = selectedPolygon, group = "highlighted_polygon")
       
       output$suburb <- renderText(layerid)
-      # output$population <- renderText(prettyNum(population_data$X2016, big.mark = ","))
+      output$population <- renderText(prettyNum(population_data$population, big.mark = ","))
       # output$population_change <- renderText(paste0(round(as.numeric(population_data$Change), digits = 2), "%"))
       
       # output$industry_chart <- renderHighchart({
