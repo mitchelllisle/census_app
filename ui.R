@@ -34,11 +34,14 @@ navbarPage(windowTitle = "Mitchell Lisle | Compass", img(src = "logo.png", heigh
                                   h5(textOutput("suburb")),
                                   textOutput("blurb"),
                                   h2("Population"),
-                                  h5(textOutput("population"))
+                                  h5(textOutput("population")),
+                                  h2("Most Prevalent Countries of Birth"),
+                                  p("Excluding Australia"),
+                                  highchartOutput("countryOfBirth_chart", height = "150px"),
                                   # h2("Most Prevalent Industry of Employment"),
                                   # highchartOutput("industry_chart", height = "25%"),
-                                  # h2("Most Prevalent Religions"),
-                                  # highchartOutput("religion_chart", height = "25%")
+                                  h2("Most Prevalent Religions"),
+                                  highchartOutput("religion_chart", height = "150px")
                                   # h5(textOutput("population_change")) 
                                 )
                           ) 

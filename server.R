@@ -27,7 +27,8 @@ source("R/processing.R")
 map_polygons <- geojsonio::geojson_read("data/suburb_simple.geojson", what = "sp")
 suburb_blurbs <- fread("data/blurbs.csv")
 population <- fread("data/suburb_data/ssc_population.csv", header = TRUE)
-# religion <- fread("data/religions_POA.csv", header = TRUE)
+religion <- fread("data/suburb_data/ssc_religion.csv", header = TRUE)
+countryOfBirth <- fread("data/suburb_data/ssc_countryofbirth.csv", header = TRUE)
 # industry <- fread("data/industry_POA_2011.csv", header = TRUE)
 suburbs <- unique(map_polygons$SSC_NAME)
 ####################################################
@@ -70,7 +71,8 @@ function(input, output, session) {
       shinyjs::show(id = "fields", anim = FALSE)
       layerid <- input$map_shape_click$id
       population_data <- data.frame(subset(population, select = c("population"), SSC == layerid))
-      # religion_data <- data.frame(subset(religion, select = c("religion", "count"), POA_CODE == layerid)) %>% arrange(religion)
+      religion_data <- data.frame(subset(religion, select = c("variable", "value"), SSC == layerid)) %>% arrange(variable)
+      countryOfBirth_data <- data.frame(subset(countryOfBirth, select = c("variable", "value"), SSC == layerid)) %>% arrange(variable)
       # industry_data <- data.frame(subset(industry, select = c("industry", "count"), POA_CODE == layerid)) %>% arrange(industry)
       suburb_blurbs_data <- data.frame(subset(suburb_blurbs, select = "blurb", suburb == layerid))
       selectedPolygon <- subset(map_polygons, map_polygons$SSC_NAME == layerid)
@@ -94,17 +96,23 @@ function(input, output, session) {
       output$population <- renderText(prettyNum(population_data$population, big.mark = ","))
       # output$population_change <- renderText(paste0(round(as.numeric(population_data$Change), digits = 2), "%"))
       
+      output$countryOfBirth_chart <- renderHighchart({
+        hchart(countryOfBirth_data, "column", hcaes(x = variable, y = value), animation = FALSE, color = '#4A90E2') %>%
+          hc_xAxis(title = list(enabled = FALSE)) %>%
+          hc_yAxis(title = list(enabled = FALSE))
+      })
+      
       # output$industry_chart <- renderHighchart({
       #   hchart(industry_data, "column", hcaes(x = industry, y = count), animation = FALSE, color = '#4A90E2') %>%
       #     hc_xAxis(title = list(enabled = FALSE)) %>%
       #     hc_yAxis(title = list(enabled = FALSE))
       # })
       # 
-      # output$religion_chart <- renderHighchart({
-      #   hchart(religion_data, "column", hcaes(x = religion, y = count), animation = FALSE, color = '#FA475D') %>% 
-      #     hc_xAxis(title = list(enabled = FALSE)) %>%
-      #     hc_yAxis(title = list(enabled = FALSE))
-      # })
+      output$religion_chart <- renderHighchart({
+        hchart(religion_data, "column", hcaes(x = variable, y = value), animation = FALSE, color = '#FA475D') %>%
+          hc_xAxis(title = list(enabled = FALSE)) %>%
+          hc_yAxis(title = list(enabled = FALSE))
+      })
       
       output$blurb <- renderText({
           suburb_blurbs_data$blurb
