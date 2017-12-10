@@ -1,0 +1,12 @@
+name: census_app
+title: census_app
+username:
+account: mitchelllisle
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 241573
+bundleId: 1125488
+url: https://mitchelllisle.shinyapps.io/census_app/
+when: 1512876865.99382
+asMultiple: FALSE
+asStatic: FALSE

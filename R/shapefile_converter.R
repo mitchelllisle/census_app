@@ -13,13 +13,13 @@ shape <- shapefile("~/Downloads/1270055003_ssc_2011_aust_shape/SSC_2011_AUST.shp
 suburb_json <- geojson_json(shape)
 
 #simplify to reduce file size (will also reduce polygon accuracy when plotted on map) - use keep = 0.1 to play with simplification
-suburb_json_simplified <- ms_simplify(suburb_json, keep = 0.02)
+suburb_json_simplified <- ms_simplify(suburb_json, keep = 0.001)
 
 # Write to geojson file
-geojson_write(suburb_json_simplified, file = "suburb_simple.geojson")
+geojson_write(suburb_json_simplified, file = "suburb_simple_001.geojson")
 
 # Read in as you would in an app
-ssc_geojson <- geojsonio::geojson_read("suburb_simple.geojson", what = "sp")
+ssc_geojson <- system.time(geojsonio::geojson_read("suburb_simple_001.geojson", what = "sp"))
 
 leaflet(ssc_geojson) %>%
   setView(133.9892578125, -28.110748760633534, 5) %>%
