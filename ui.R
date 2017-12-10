@@ -4,7 +4,7 @@ library(shinycssloaders)
 library(shinyjs)
 
 navbarPage(windowTitle = "Mitchell Lisle | Compass", img(src = "logo.png", height = "20px"), id="nav", collapsible = TRUE,
-           tabPanel("Census Map",
+           tabPanel("Census Map", icon = icon("map"),
                     div(class="outer",
                         tags$head(
                           HTML(
@@ -23,32 +23,44 @@ navbarPage(windowTitle = "Mitchell Lisle | Compass", img(src = "logo.png", heigh
                         ),
 
                         leafletOutput("map", width="65%", height="100%"),
-
-                        
                           absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
                                         draggable = FALSE, top = 00, left = 0, right = 0, bottom = 0,
                                         width = "35%", height = "100%", overflow = "scroll",
-                                        # uiOutput("search"),
-                                shinyjs::hidden(div(id = "fields",
-                                  h1("Suburb"),
-                                  h5(textOutput("suburb")),
-                                  textOutput("blurb"),
-                                  h2("Population"),
-                                  h5(textOutput("population")),
-                                  h2("Most Prevalent Countries of Birth"),
-                                  p("Excluding Australia"),
-                                  highchartOutput("countryOfBirth_chart", height = "150px"),
-                                  # h2("Most Prevalent Industry of Employment"),
-                                  # highchartOutput("industry_chart", height = "25%"),
-                                  h2("Most Prevalent Religions"),
-                                  highchartOutput("religion_chart", height = "150px")
-                                  # h5(textOutput("population_change")) 
-                                )
+                              div(id = "load_message", h2("Please click suburb to see data.....")),
+                              shinyjs::hidden(div(id = "fields",
+                              h1("Suburb"),
+                              h5(textOutput("suburb")),
+                              textOutput("blurb"),
+                              h2("Population"),
+                              h5(textOutput("population")),
+                              tabsetPanel(
+                                shiny::tabPanel("Cultural", icon = icon("globe"),
+                                                      h2("Most Prevalent Countries of Birth"),
+                                                      p("Excluding Australia"),
+                                                      highchartOutput("countryOfBirth_chart", height = "200px"),
+                                                      h2("Most Prevalent Religions"),
+                                                      highchartOutput("religion_chart", height = "200px")
+                                                      # h5(textOutput("population_change")) 
+                                ),
+                                tabPanel("Housing", icon = icon("home"),
+                                         h2("Rent Payments"),
+                                         highchartOutput("rentPayments_chart", height = "200px")),
+                                
+                                tabPanel("Work", icon = icon("briefcase"),
+                                         h2("Most Prevalent Yearly Income"),
+                                         highchartOutput("income_chart", height = "200px"),
+                                         h2("Most Prevalent Occupations"),
+                                         highchartOutput("occupation_chart", height = "200px"),
+                                         h2("How people travel to work"),
+                                         highchartOutput("travel_chart", height = "200px")
+                                         )
+                              )
                           ) 
+                        )
                         )
                     )
            ),
-           tabPanel("About"
+           tabPanel("About", icon = icon("user")
              
            ),
            
